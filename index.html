@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Skills Demo Prompts</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #0f1115;
+    color: #e6e6e6;
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  h1 { font-size: 26px; margin-bottom: 8px; }
+  h2 { font-size: 20px; margin: 36px 0 14px; }
+  .tag { color: #8b93a7; font-size: 14px; font-weight: normal; }
+  .card {
+    background: #1a1d24;
+    border: 1px solid #2a2e38;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .label { font-size: 15px; font-weight: 600; }
+  .label span { color: #8b93a7; font-weight: normal; }
+  button {
+    background: #d97757;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button:hover { background: #c4633f; }
+  button.done { background: #2e9e6b; }
+  pre {
+    background: #0b0d11;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0;
+    font-family: Consolas, Menlo, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+</style>
+</head>
+<body>
+
+<h1>Claude Skills Demo Prompts</h1>
+
+<h2>Part 1: With / <span class="tag">(you pick the skill)</span></h2>
+
+<div class="card">
+  <div class="head">
+    <div class="label">1. Code review <span>(dev-review-debug)</span></div>
+    <button onclick="copyPrompt('p1', this)">Copy</button>
+  </div>
+<pre id="p1">/dev-review-debug
+
+def get_user(conn, user_id):
+    query = "SELECT * FROM users WHERE id = " + user_id
+    result = conn.execute(query)
+    return result.fetchone()["name"]</pre>
+</div>
+
+<div class="card">
+  <div class="head">
+    <div class="label">2. Messy meeting notes <span>(work-clarity-assistant)</span></div>
+    <button onclick="copyPrompt('p2', this)">Copy</button>
+  </div>
+<pre id="p2">/work-clarity-assistant
+
+Sprint sync, 9 Oct
+- login bug still open, Ravi says fix by Monday
+- new dashboard design approved
+- Priya to share API docs by Wed
+- someone needs to update the test cases, not decided who
+- launch date moved from 20 Oct to 27 Oct
+- next sync Friday</pre>
+</div>
+
+<h2>Part 2: Without / <span class="tag">(Claude picks the skill)</span></h2>
+
+<div class="card">
+  <div class="head">
+    <div class="label">3. Debugging <span>(dev-review-debug)</span></div>
+    <button onclick="copyPrompt('p3', this)">Copy</button>
+  </div>
+<pre id="p3">I'm getting this error, help me debug it.
+
+def average(scores):
+    return sum(scores) / len(scores)
+
+print(average([]))
+
+Traceback (most recent call last):
+  File "main.py", line 4, in &lt;module&gt;
+    print(average([]))
+  File "main.py", line 2, in average
+    return sum(scores) / len(scores)
+ZeroDivisionError: division by zero</pre>
+</div>
+
+<div class="card">
+  <div class="head">
+    <div class="label">4. Plan my day <span>(work-clarity-assistant)</span></div>
+    <button onclick="copyPrompt('p4', this)">Copy</button>
+  </div>
+<pre id="p4">Plan my day. I have these tasks and can't do everything:
+
+- client demo slides, due today 5 pm
+- reply to HR about the leave form
+- review Ravi's PR
+- quarterly report, due next Friday
+- team lunch at 1 pm
+- clean up old Jira tickets</pre>
+</div>
+
+<script>
+function copyPrompt(id, btn) {
+  const text = document.getElementById(id).textContent;
+  const done = () => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('done');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('done');
+    }, 1500);
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(done);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    done();
+  }
+}
+</script>
+
+</body>
+</html>
